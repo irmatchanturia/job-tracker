@@ -1,0 +1,287 @@
+<div class="home-page">
+  <!-- TOP INTRO -->
+  <section class="intro">
+    <div class="intro-top">
+      <div class="intro-copy">
+        <span class="eyebrow">JOB APPLICATION TRACKER</span>
+
+        <h1>
+          Track every opportunity.
+          <span>Know exactly where you stand.</span>
+        </h1>
+
+        <p>
+          One workspace for every application, interview, rejection and offer throughout your job
+          search.
+        </p>
+      </div>
+
+      <div class="intro-action">
+        <a routerLink="/applications/new" class="primary-action">
+          <span class="plus">+</span>
+          Add application
+        </a>
+
+        <a routerLink="/applications" class="text-link">
+          View all applications
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stat-item">
+        <span class="stat-label">Applications</span>
+        <strong>{{ stats.total }}</strong>
+        <span class="stat-note">Total tracked</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <span class="stat-label">Interviews</span>
+        <strong>{{ stats.interviews }}</strong>
+        <span class="stat-note">In progress</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <span class="stat-label">Offers</span>
+        <strong>{{ stats.offers }}</strong>
+        <span class="stat-note">Successful</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <span class="stat-label">Rejected</span>
+        <strong>{{ stats.rejected }}</strong>
+        <span class="stat-note">Closed</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKSPACE PREVIEW -->
+  <section class="workspace-section">
+    <div class="workspace-grid">
+      <!-- RECENT APPLICATIONS -->
+      <article class="workspace-panel applications-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-kicker">WORKSPACE</span>
+            <h2>Recent applications</h2>
+          </div>
+
+          <a routerLink="/applications">View all</a>
+        </div>
+
+        @if (isLoading) {
+          <div class="panel-state">Loading applications...</div>
+        } @else if (errorMessage) {
+          <div class="panel-state">
+            {{ errorMessage }}
+          </div>
+        } @else if (recentApplications.length > 0) {
+          <div class="recent-applications">
+            @for (application of recentApplications; track application.id) {
+              <div class="application-item">
+                <div class="application-main">
+                  <div class="company-mark">
+                    {{ application.company.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="application-copy">
+                    <strong>
+                      {{ application.position }}
+                    </strong>
+
+                    <span>
+                      {{ application.company }}
+                    </span>
+                  </div>
+                </div>
+
+                <span
+                  class="status"
+                  [class.applied]="application.status === 'applied'"
+                  [class.interview]="application.status === 'interview'"
+                  [class.offer]="application.status === 'offer'"
+                  [class.rejected]="application.status === 'rejected'"
+                >
+                  {{ application.status }}
+                </span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-panel">
+            <span class="empty-number">01</span>
+
+            <div>
+              <strong>Your workspace is empty.</strong>
+
+              <p>Add your first job application and start tracking your progress.</p>
+
+              <a routerLink="/applications/new"> Add first application → </a>
+            </div>
+          </div>
+        }
+      </article>
+
+      <!-- PIPELINE -->
+      <article class="workspace-panel pipeline-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-kicker">PIPELINE</span>
+            <h2>Current progress</h2>
+          </div>
+        </div>
+
+        <div class="pipeline">
+          <div class="pipeline-row">
+            <div class="pipeline-name">
+              <span class="dot applied-dot"></span>
+              Applied
+            </div>
+
+            <div class="pipeline-bar">
+              <span class="applied-bar"></span>
+            </div>
+
+            <strong>
+              {{ stats.applied }}
+            </strong>
+          </div>
+
+          <div class="pipeline-row">
+            <div class="pipeline-name">
+              <span class="dot interview-dot"></span>
+              Interview
+            </div>
+
+            <div class="pipeline-bar">
+              <span class="interview-bar"></span>
+            </div>
+
+            <strong>
+              {{ stats.interviews }}
+            </strong>
+          </div>
+
+          <div class="pipeline-row">
+            <div class="pipeline-name">
+              <span class="dot offer-dot"></span>
+              Offer
+            </div>
+
+            <div class="pipeline-bar">
+              <span class="offer-bar"></span>
+            </div>
+
+            <strong>
+              {{ stats.offers }}
+            </strong>
+          </div>
+
+          <div class="pipeline-row">
+            <div class="pipeline-name">
+              <span class="dot rejected-dot"></span>
+              Rejected
+            </div>
+
+            <div class="pipeline-bar">
+              <span class="rejected-bar"></span>
+            </div>
+
+            <strong>
+              {{ stats.rejected }}
+            </strong>
+          </div>
+        </div>
+
+        <a routerLink="/kanban" class="pipeline-link">
+          Open Kanban board
+          <span>↗</span>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <!-- PRODUCT MESSAGE -->
+  <section class="product-message">
+    <div class="message-number">02</div>
+
+    <div class="message-copy">
+      <span class="eyebrow">BUILT FOR THE JOB SEARCH</span>
+
+      <h2>
+        Your job search,
+        <span>without the chaos.</span>
+      </h2>
+
+      <p>
+        Stop keeping vacancies in browser tabs, notes and random documents. JobTrack gives every
+        application a clear place and a clear status.
+      </p>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process">
+    <div class="process-header">
+      <span class="eyebrow">SIMPLE PROCESS</span>
+
+      <h2>Three steps. One clear workflow.</h2>
+    </div>
+
+    <div class="process-grid">
+      <article class="process-item">
+        <div class="process-top">
+          <span>01</span>
+          <div class="process-line"></div>
+        </div>
+
+        <h3>Save</h3>
+
+        <p>Add a vacancy with the company, position, technologies and link.</p>
+      </article>
+
+      <article class="process-item">
+        <div class="process-top">
+          <span>02</span>
+          <div class="process-line"></div>
+        </div>
+
+        <h3>Track</h3>
+
+        <p>Update its status as you move through the hiring process.</p>
+      </article>
+
+      <article class="process-item">
+        <div class="process-top">
+          <span>03</span>
+        </div>
+
+        <h3>Move forward</h3>
+
+        <p>Use your dashboard to understand your progress and next steps.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- FINAL ACTION -->
+  <section class="final-action">
+    <div>
+      <span class="final-label">START TRACKING</span>
+
+      <h2>Your next opportunity could be one application away.</h2>
+    </div>
+
+    <a routerLink="/applications/new" class="final-button">
+      Add application
+      <span>↗</span>
+    </a>
+  </section>
+</div>
