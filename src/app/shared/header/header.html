@@ -1,1 +1,29 @@
-<p>header works!</p>
+<header class="header">
+  <div class="header-container">
+    <a routerLink="/" class="brand">
+      <div class="brand-icon">J</div>
+
+      <span class="brand-name"> JobTrack </span>
+    </a>
+
+    <nav class="navigation">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </a>
+
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/applications" routerLinkActive="active"> Applications </a>
+      }
+    </nav>
+
+    <div class="auth-actions">
+      @if (!authService.isLoggedIn()) {
+        <a routerLink="/sign-in" class="sign-in-button"> Sign in </a>
+
+        <a routerLink="/sign-up" class="sign-up-button"> Get started </a>
+      } @else {
+        <button type="button" class="sign-in-button" (click)="authService.logout()">Log out</button>
+      }
+    </div>
+  </div>
+</header>

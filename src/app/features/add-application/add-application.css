@@ -1,0 +1,170 @@
+.add-application-page {
+  min-height: calc(100vh - 80px);
+  padding: 60px 24px;
+  background: #f8fafc;
+}
+
+.form-container {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-header {
+  margin-bottom: 36px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.form-header h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #111827;
+}
+
+.form-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font: inherit;
+  color: #111827;
+  background: #ffffff;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #6366f1;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.hint {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #dc2626;
+}
+
+.submit-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: #111827;
+  color: white;
+}
+
+.primary-button:hover {
+  background: #1f2937;
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.secondary-button:hover {
+  background: #e5e7eb;
+}
+
+@media (max-width: 650px) {
+  .add-application-page {
+    padding: 30px 16px;
+  }
+
+  .form-container {
+    padding: 24px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-header h1 {
+    font-size: 26px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+}

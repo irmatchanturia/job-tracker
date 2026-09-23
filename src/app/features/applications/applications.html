@@ -1,1 +1,405 @@
-<p>applications works!</p>
+<section class="applications-page">
+  <div class="page-container">
+    <header class="page-header">
+      <div class="heading">
+        <span class="eyebrow">JOB TRACKER</span>
+
+        <h1>My applications</h1>
+
+        <p>Track your job search and keep every opportunity organized.</p>
+      </div>
+
+      <a routerLink="/applications/new" class="add-button">
+        <span class="plus">+</span>
+        Add application
+      </a>
+    </header>
+
+    <div class="toolbar">
+      <div class="search-wrapper">
+        <svg
+          class="search-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+
+        <input
+          type="text"
+          placeholder="Search by company, position or technology..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+
+      <select class="status-filter" [(ngModel)]="selectedStatus">
+        <option value="all">All statuses</option>
+        <option value="applied">Applied</option>
+        <option value="interview">Interview</option>
+        <option value="offer">Offer</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    <div class="list-summary">
+      <span> {{ totalApplications }} applications </span>
+    </div>
+
+    @if (isLoading) {
+      <div class="state-card">
+        <div class="spinner"></div>
+
+        <p>Loading applications...</p>
+      </div>
+    }
+
+    @if (errorMessage && !isLoading) {
+      <div class="error-message">
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (!isLoading && applications.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">+</div>
+
+        <h2>No applications yet</h2>
+
+        <p>Add your first application and start tracking your job search.</p>
+
+        <a routerLink="/applications/new" class="empty-button"> Add application </a>
+      </div>
+    }
+
+    @if (!isLoading && applications.length > 0 && filteredApplications.length === 0) {
+      <div class="empty-state">
+        <h2>No results found</h2>
+
+        <p>Try changing your search or selected status.</p>
+      </div>
+    }
+
+    @if (!isLoading && filteredApplications.length > 0) {
+      <div class="applications-card">
+        <div class="table-header">
+          <span>Position</span>
+          <span>Status</span>
+          <span>Applied</span>
+          <span>Salary</span>
+          <span></span>
+        </div>
+
+        @for (application of filteredApplications; track application.id) {
+          <article class="application-row">
+            <div class="job-column">
+              <div class="company-avatar">
+                {{ application.company.charAt(0).toUpperCase() }}
+              </div>
+
+              <div class="job-content">
+                <h2>
+                  {{ application.position }}
+                </h2>
+
+                <div class="company-line">
+                  <span class="company-name">
+                    {{ application.company }}
+                  </span>
+
+                  @if (application.vacancyUrl) {
+                    <a
+                      [href]="application.vacancyUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="vacancy-link"
+                    >
+                      View job
+                    </a>
+                  }
+                </div>
+
+                @if (application.technologies.length > 0) {
+                  <div class="technologies">
+                    @for (technology of application.technologies.slice(0, 3); track technology) {
+                      <span>
+                        {{ technology }}
+                      </span>
+                    }
+
+                    @if (application.technologies.length > 3) {
+                      <span> +{{ application.technologies.length - 3 }} </span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="status-column">
+              <span
+                class="status-badge"
+                [class.applied]="application.status === 'applied'"
+                [class.interview]="application.status === 'interview'"
+                [class.offer]="application.status === 'offer'"
+                [class.rejected]="application.status === 'rejected'"
+              >
+                <span class="status-dot"></span>
+
+                {{ application.status }}
+              </span>
+            </div>
+
+            <div class="date-column">
+              {{ application.appliedDate }}
+            </div>
+
+            <div class="salary-column">
+              @if (application.salary) {
+                {{ application.salary }}
+              } @else {
+                <span class="muted"> — </span>
+              }
+            </div>
+
+            <div class="actions-column">
+              <button
+                type="button"
+                class="action-button edit-button"
+                (click)="openEdit(application)"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="action-button delete-button"
+                (click)="openDelete(application)"
+              >
+                Delete
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+
+      <!-- PAGINATION -->
+
+      @if (totalPages > 0) {
+        <div class="pagination">
+          <div class="pagination-info">
+            Page
+
+            <strong>
+              {{ currentPage }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalPages }}
+            </strong>
+
+            <span>·</span>
+
+            {{ totalApplications }}
+            applications
+          </div>
+
+          <div class="pagination-controls">
+            <button
+              type="button"
+              class="pagination-button arrow-button"
+              [disabled]="!hasPrevPage"
+              (click)="previousPage()"
+            >
+              ←
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                class="pagination-button"
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              class="pagination-button arrow-button"
+              [disabled]="!hasNextPage"
+              (click)="nextPage()"
+            >
+              →
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<!-- EDIT APPLICATION MODAL -->
+
+@if (isEditOpen) {
+  <div class="modal-backdrop" (click)="closeEdit()">
+    <div class="edit-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow"> EDIT APPLICATION </span>
+
+          <h2>Update application</h2>
+        </div>
+
+        <button type="button" class="close-button" (click)="closeEdit()">×</button>
+      </div>
+
+      <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-company"> Company </label>
+
+            <input id="edit-company" type="text" formControlName="company" />
+
+            @if (editForm.controls.company.touched && editForm.controls.company.invalid) {
+              <small class="field-error"> Company is required. </small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="edit-position"> Position </label>
+
+            <input id="edit-position" type="text" formControlName="position" />
+
+            @if (editForm.controls.position.touched && editForm.controls.position.invalid) {
+              <small class="field-error"> Position is required. </small>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-status"> Status </label>
+
+            <select id="edit-status" formControlName="status">
+              <option value="applied">Applied</option>
+
+              <option value="interview">Interview</option>
+
+              <option value="offer">Offer</option>
+
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-date"> Applied date </label>
+
+            <input id="edit-date" type="date" formControlName="appliedDate" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-url"> Vacancy URL </label>
+
+          <input id="edit-url" type="url" formControlName="vacancyUrl" placeholder="https://..." />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-technologies"> Technologies </label>
+
+          <input
+            id="edit-technologies"
+            type="text"
+            formControlName="technologies"
+            placeholder="Angular, TypeScript, JavaScript"
+          />
+
+          <small class="form-hint"> Separate technologies with commas. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-salary"> Salary </label>
+
+          <input id="edit-salary" type="number" formControlName="salary" />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-notes"> Notes </label>
+
+          <textarea id="edit-notes" rows="4" formControlName="notes"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-button" (click)="closeEdit()">Cancel</button>
+
+          <button type="submit" class="save-button" [disabled]="isSaving">
+            @if (isSaving) {
+              Saving...
+            } @else {
+              Save changes
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- DELETE CONFIRMATION MODAL -->
+
+@if (applicationToDelete) {
+  <div class="delete-modal-backdrop" (click)="closeDelete()">
+    <div class="delete-modal" (click)="$event.stopPropagation()">
+      <div class="delete-icon">!</div>
+
+      <div class="delete-content">
+        <h2>Delete application?</h2>
+
+        <p>
+          Are you sure you want to delete your application for
+
+          <strong>
+            {{ applicationToDelete.position }}
+          </strong>
+
+          at
+
+          <strong>
+            {{ applicationToDelete.company }} </strong
+          >?
+        </p>
+
+        <p class="delete-warning">This action cannot be undone.</p>
+      </div>
+
+      <div class="delete-actions">
+        <button
+          type="button"
+          class="delete-cancel-button"
+          [disabled]="deletingId !== null"
+          (click)="closeDelete()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="confirm-delete-button"
+          [disabled]="deletingId !== null"
+          (click)="confirmDelete()"
+        >
+          @if (deletingId !== null) {
+            Deleting...
+          } @else {
+            Delete application
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
