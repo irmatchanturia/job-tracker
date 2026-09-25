@@ -11,4 +11,5 @@ import { AuthService } from '../../core/services/auth.ts';
 })
 export class Header {
   readonly authService = inject(AuthService);
+  
 }

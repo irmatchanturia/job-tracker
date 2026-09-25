@@ -1,0 +1,45 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+
+    <p class="subtitle">Sign in to continue managing your job applications.</p>
+
+    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+
+        <input id="email" type="email" formControlName="email" placeholder="Enter your email" />
+
+        @if (signInForm.get('email')?.touched && signInForm.get('email')?.errors?.['required']) {
+          <small>Email is required.</small>
+        }
+
+        @if (signInForm.get('email')?.touched && signInForm.get('email')?.errors?.['email']) {
+          <small>Enter a valid email address.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+
+        @if (signInForm.get('password')?.touched && signInForm.get('password')?.invalid) {
+          <small>Password is required.</small>
+        }
+      </div>
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <p class="register-text">
+      Don't have an account?
+      <a routerLink="/sign-up">Create account</a>
+    </p>
+  </div>
+</div>
